@@ -22,7 +22,8 @@ export default function draftToHtml(
           listBlocks.push(block);
         } else {
           if (listBlocks.length > 0) {
-            const listHtml = getListMarkup(listBlocks, entityMap, hashtagConfig, customEntityTransform); // eslint-disable-line max-len
+            // const listHtml = getListMarkup(listBlocks, entityMap, hashtagConfig, customEntityTransform); // eslint-disable-line max-len
+            const listHtml = getListMarkup(listBlocks, entityMap, hashtagConfig, directional, customEntityTransform); // eslint-disable-line max-len
             html.push(listHtml);
             listBlocks = [];
           }
