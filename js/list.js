@@ -24,6 +24,7 @@ export function getListMarkup(
   directional,
   customEntityTransform,
   isNested,
+  nestedBlockDoubleLevel,
 ) {
   const listHtml = [];
   let nestedListBlock = [];
@@ -32,6 +33,7 @@ export function getListMarkup(
   let threeLevelUl = false;
   listBlocks.forEach((block) => {
     let nestedBlock = false;
+    let nestedBlockDoubleLevel = false;
     if (!previousBlock) {
       let blockTypeEle = getBlockTag(block.type);
       if(!isNested) {
@@ -45,7 +47,12 @@ export function getListMarkup(
           listHtml.push(`<${blockTypeEle}>\n`);
         }
       }else {
-        listHtml.push(`<${blockTypeEle}>\n`);
+        if(!nestedBlockDoubleLevel) {
+          doubleLevelUl = true;
+          listHtml.push(`<${blockTypeEle}><${blockTypeEle}>\n`);
+        }else {
+          listHtml.push(`<${blockTypeEle}>\n`);
+        }
       }
     } else if (previousBlock.type !== block.type) {
       listHtml.push(`</${getBlockTag(previousBlock.type)}>\n`);
@@ -63,6 +70,9 @@ export function getListMarkup(
       }
     } else {
       nestedBlock = true;
+      if(block.depth - previousBlock.length === 2) {
+        nestedBlockDoubleLevel = false;
+      }
       nestedListBlock.push(block);
     }
     if (!nestedBlock) {
@@ -93,6 +103,7 @@ export function getListMarkup(
       directional,
       customEntityTransform,
       true,
+      nestedBlockDoubleLevel,
     ));
   }
   let previousBlockEle = getBlockTag(previousBlock.type);
