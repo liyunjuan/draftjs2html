@@ -29,6 +29,8 @@ export function getListMarkup(
   const listHtml = [];
   let nestedListBlock = [];
   let previousBlock;
+  let doubleLevelUl = false;
+  let threeLevelUl = false;
   listBlocks.forEach((block) => {
     let nestedBlock = false;
     if (!previousBlock) {
