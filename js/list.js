@@ -23,8 +23,7 @@ export function getListMarkup(
   hashtagConfig,
   directional,
   customEntityTransform,
-  isNested, //是否是内嵌调用
-
+  isNested,
 ) {
   const listHtml = [];
   let nestedListBlock = [];
@@ -34,20 +33,20 @@ export function getListMarkup(
   listBlocks.forEach((block) => {
     let nestedBlock = false;
     if (!previousBlock) {
+      let blockTypeEle = getBlockTag(block.type);
       if(!isNested) {
         if(block.depth === 2) {
           threeLevelUl = true;
-          listHtml.push(`<${getBlockTag(block.type)}><${getBlockTag(block.type)}><${getBlockTag(block.type)}>\n`);
+          listHtml.push(`<${blockTypeEle}><${blockTypeEle}><${blockTypeEle}>\n`);
         }else if(block.depth === 1) {
           doubleLevelUl = true;
-          listHtml.push(`<${getBlockTag(block.type)}><${getBlockTag(block.type)}>\n`);
+          listHtml.push(`<${blockTypeEle}><${blockTypeEle}>\n`);
         }else {
-          listHtml.push(`<${getBlockTag(block.type)}>\n`);
+          listHtml.push(`<${blockTypeEle}>\n`);
         }
       }else {
-        listHtml.push(`<${getBlockTag(block.type)}>\n`);
+        listHtml.push(`<${blockTypeEle}>\n`);
       }
-      // listHtml.push(`<${getBlockTag(block.type)}>\n`);
     } else if (previousBlock.type !== block.type) {
       listHtml.push(`</${getBlockTag(previousBlock.type)}>\n`);
       listHtml.push(`<${getBlockTag(block.type)}>\n`);
@@ -96,13 +95,14 @@ export function getListMarkup(
       true,
     ));
   }
+  let previousBlockEle = getBlockTag(previousBlock.type);
   if(threeLevelUl) {
-    listHtml.push(`</${getBlockTag(previousBlock.type)}></${getBlockTag(previousBlock.type)}></${getBlockTag(previousBlock.type)}>\n`);
+    listHtml.push(`</${previousBlockEle}></${previousBlockEle}></${previousBlockEle}>\n`);
   }else if(doubleLevelUl) {
-    listHtml.push(`</${getBlockTag(previousBlock.type)}></${getBlockTag(previousBlock.type)}>\n`);
+    listHtml.push(`</${previousBlockEle}></${previousBlockEle}>\n`);
   }else {
-    listHtml.push(`</${getBlockTag(previousBlock.type)}>\n`);
+    listHtml.push(`</${previousBlockEle}>\n`);
   }
-  // listHtml.push(`</${getBlockTag(previousBlock.type)}>\n`);
+
   return listHtml.join('');
 }
